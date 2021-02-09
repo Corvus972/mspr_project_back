@@ -51,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def __str__(self):
-        return self.username
+        return self.email
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
