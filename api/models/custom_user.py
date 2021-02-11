@@ -5,7 +5,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
 from ..custom_user_manager import CustomUserManager
 

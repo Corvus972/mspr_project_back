@@ -23,6 +23,7 @@ load_dotenv(os.path.join(BASE_DIR, 'app/.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'import_export',
 ]
 
 MIDDLEWARE = [

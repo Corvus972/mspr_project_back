@@ -4,6 +4,8 @@ from rest_framework import viewsets
 from .serializers import ProductSerializer
 from api.models.product import Product
 
+from api.resource import ProductResource
+
 # Create your views here.
 
 
