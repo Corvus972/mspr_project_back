@@ -1,0 +1,10 @@
+/env_mspr
+app/
+.vscode
+.env
+/__pycache__
+api/__pycache__
+app/__pycache__
+api/migrations
+api/models/
+api/__pycache__/admin
