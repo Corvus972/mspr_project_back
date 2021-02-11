@@ -4,12 +4,13 @@ from api.helpers import RandomFileName
 
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=30)
+    product_name = models.CharField(
+        max_length=30, verbose_name="Nom du produit")
     product_price = models.DecimalField(
-        default=0.00, decimal_places=2, max_digits=100)
+        default=0.00, decimal_places=2, max_digits=100, verbose_name="Prix du produit")
     description = models.CharField(max_length=500)
-    quantity = models.IntegerField(default=0)
-    created_at = models.DateField()
+    quantity = models.IntegerField(default=0, verbose_name="Quantité")
+    created_at = models.DateField(verbose_name="Créée le")
     sku = models.CharField(max_length=30)
     image = models.ImageField(
         upload_to=RandomFileName('img/'), null=True, blank=True)
