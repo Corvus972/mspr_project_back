@@ -30,6 +30,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'import_export',
 ]
 
 MIDDLEWARE = [
