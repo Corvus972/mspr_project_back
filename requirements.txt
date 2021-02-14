@@ -3,6 +3,7 @@ autopep8==1.5.4
 defusedxml==0.6.0
 diff-match-patch==20200713
 Django==3.1.6
+django-cors-headers==3.7.0
 django-import-export==2.5.0
 djangorestframework==3.12.2
 et-xmlfile==1.0.1
