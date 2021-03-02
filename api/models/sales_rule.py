@@ -16,3 +16,6 @@ class SalesRule(models.Model):
 
     def __str__(self):
         return self.name
+
+    def products_list(self):
+        return ', '.join([a.product_name for a in self.product_associated.all()])

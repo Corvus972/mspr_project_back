@@ -12,6 +12,7 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     # GET
     list_display = ('product_name', 'product_price',
                     'description', 'quantity', 'created_at', 'sku', 'image')
+
     # POST
     fieldsets = (
         ('Informations requises', {
@@ -37,7 +38,7 @@ admin.site.register(Product, ProductAdmin)
 class SalesRuleAdmin(admin.ModelAdmin):
     # GET
     list_display = ('name', 'description',
-                    'from_data', 'to_data', 'coupon_code', 'discount_amount', 'product_associated')
+                    'from_data', 'to_data', 'coupon_code', 'discount_amount', 'products_list')
 
     # POST
     fieldsets = (
