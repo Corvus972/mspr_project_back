@@ -1,4 +1,5 @@
 /env_mspr
+/env_mspr/Lib/
 .vscode
 .env
 api/__pycache__
