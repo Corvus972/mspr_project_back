@@ -5,7 +5,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.db.models import JSONField
 from django.contrib.postgres.fields import ArrayField
 from ..custom_user_manager import CustomUserManager
 
@@ -33,7 +32,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         _('active'),
-        default=False,
+        default=True,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
@@ -57,3 +56,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [
                   self.email], **kwargs, fail_silently=False)
+

@@ -7,3 +7,4 @@ api/__pycache__
 app/__pycache__
 api/migrations
 api/models/
+.envCakir

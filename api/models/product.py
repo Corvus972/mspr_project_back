@@ -1,5 +1,6 @@
 from django.db import models
 from api.helpers import RandomFileName
+from django.utils.html import format_html
 # Product model
 
 
@@ -18,9 +19,9 @@ class Product(models.Model):
         return self.product_name
 
     def get_img(self):
-        if self.images:
+        if self.image:
             return format_html('<img src="{url}" width="50" height="50" />'.format(
-                url=self.images.url
+                url=self.image.url
             ))
         else:
             return format_html('<img src="{url}" width="50" height="50" />'.format(
