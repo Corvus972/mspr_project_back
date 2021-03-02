@@ -6,6 +6,7 @@ from api.models.custom_user import CustomUser
 from api.models.product import Product
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
+from api.models.sales_rule import SalesRule
 
 # Create your views here.
 
