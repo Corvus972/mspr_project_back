@@ -9,7 +9,9 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 router = routers.DefaultRouter()
-router.register(r'products', views.ProductViewSet)
+
+router.register(r'products', views.ProductViewSet, basename='product')
+router.register(r'salesrule', views.SalesRuleViewSet, basename='salesrules')
 router.register(r'CustomUsers', views.CustomUserViewSet)
 # http://127.0.0.1:8000/login/
 
@@ -17,6 +19,10 @@ router.register(r'CustomUsers', views.CustomUserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # test http://127.0.0.1:8000/ruleproduct/id_in_your_product_associated
+    path('ruleproduct/<product_associated>',
+         views.SaleProduct.as_view(), name='saleproduct')
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('login/', MyTokenObtainPairView.as_view(), name='token_create'),
