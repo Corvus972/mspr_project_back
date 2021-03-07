@@ -12,7 +12,7 @@ class SalesRule(models.Model):
         max_length=30, verbose_name="Code du coupon")
     discount_amount = models.IntegerField(default=0, verbose_name="Remise")
     product_associated = models.ManyToManyField(
-        Product, verbose_name="produits")
+        'Product', verbose_name="produits", related_name='salesrule', blank=True)
 
     def __str__(self):
         return self.name
