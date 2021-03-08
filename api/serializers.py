@@ -35,7 +35,6 @@ class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
         """ Creates and returns a new user """
         # Validating Data
         user = CustomUser(
-            last_login=validated_data['last_login'],
             is_superuser=validated_data['is_superuser'],
             last_name=validated_data['last_name'],
             first_name=validated_data['first_name'],
