@@ -16,13 +16,15 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class SaleRuleSerializer(serializers.ModelSerializer):
+    product_associated = ProductSerializer(read_only=True, many=True)
 
     class Meta:
         ordering = ['-id']
         model = SalesRule
         fields = ('id', 'name', 'description', 'from_data', 'to_data',
                   'coupon_code', 'discount_amount', 'product_associated')
-        
+
+
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CustomUser
