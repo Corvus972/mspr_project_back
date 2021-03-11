@@ -24,6 +24,12 @@ class SaleRuleSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'from_data', 'to_data',
                   'coupon_code', 'discount_amount', 'product_associated')
 
+    def to_representation(self, instance):
+        data = super(SaleRuleSerializer, self).to_representation(instance)
+        for item in data['product_associated']:
+            item['product_price'] = float(item['product_price']) - (float(item['product_price']) / data['discount_amount'])
+        return data
+
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
