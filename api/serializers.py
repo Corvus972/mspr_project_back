@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from api.models.product import Product
@@ -27,7 +29,7 @@ class SaleRuleSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(SaleRuleSerializer, self).to_representation(instance)
         for item in data['product_associated']:
-            item['product_price'] = float(item['product_price']) - (float(item['product_price']) / data['discount_amount'])
+            item['product_price'] = str(float(item['product_price']) - (float(item['product_price']) / data['discount_amount']))
         return data
 
 
