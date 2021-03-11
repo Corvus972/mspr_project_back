@@ -13,16 +13,19 @@ from rest_framework import generics
 
 
 class ProductViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
     queryset = Product.objects.all().order_by('product_name')
     serializer_class = ProductSerializer
 
 
 class SalesRuleViewSet(viewsets.ModelViewSet):
+    permission_classes = (AllowAny,)
     queryset = SalesRule.objects.all()
     serializer_class = SaleRuleSerializer
 
 
 class SaleProduct(generics.ListAPIView):
+    permission_classes = (AllowAny,)
     serializer_class = SaleRuleSerializer
 
     def get_queryset(self):
