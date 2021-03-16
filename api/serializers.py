@@ -92,3 +92,5 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user_id'] = self.user.id
         data['super_user'] = self.user.is_superuser
         # data['groups'] = self.user.groups.values_list('name', flat=True)
+
+        return data
