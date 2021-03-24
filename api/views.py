@@ -36,13 +36,17 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('id').exclude(is_staff=True)
     serializer_class = CustomUserSerializer
 
-def perform_create(self, serializer):
-    # Hash password but passwords are not required
-    if ('password' in self.request.data):
+    def perform_create(self, serializer):
         password = make_password(self.request.data['password'])
         serializer.save(password=password)
-    else:
-        serializer.save()
+
+    def perform_update(self, serializer):
+        # Hash password but passwords are not required
+        if 'password' in self.request.data:
+            password = make_password(self.request.data['password'])
+            serializer.save(password=password)
+        else:
+            serializer.save()
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

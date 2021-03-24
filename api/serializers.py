@@ -1,7 +1,4 @@
-from decimal import Decimal
-
 from rest_framework import serializers
-
 from api.models.product import Product
 from api.models.sales_rule import SalesRule
 from api.models.custom_user import CustomUser
@@ -41,26 +38,6 @@ class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
                   'address_line_2', 'zip_code', 'city', 'email',
                   'phone_number')
 
-    def create(self, validated_data):
-        """ Creates and returns a new user """
-        # Validating Data
-        user = CustomUser(
-            is_superuser=validated_data['is_superuser'],
-            last_name=validated_data['last_name'],
-            first_name=validated_data['first_name'],
-            address_line_1=validated_data['address_line_1'],
-            address_line_2=validated_data['address_line_2'],
-            zip_code=validated_data['zip_code'],
-            city=validated_data['city'],
-            email=validated_data['email'],
-            phone_number=validated_data['phone_number'],
-        )
-
-        user.set_password(validated_data['password'])
-        user.save()
-        print(user.password)
-        return user
-
 
 class LoginSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -72,14 +49,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Serializer
     """
-
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         # Add custom claims
         token['email'] = user.email
-        # token['email'] = user.email
-        # token['id'] = user.id
         return token
 
     def validate(self, attrs):
@@ -91,9 +65,5 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['user_id'] = self.user.id
         data['super_user'] = self.user.is_superuser
-        # data['groups'] = self.user.groups.values_list('name', flat=True)
-<<<<<<< HEAD
-=======
-
->>>>>>> cf6c0f3127648ae7e42c61ad249d2ac0aa2000e2
         return data
+
