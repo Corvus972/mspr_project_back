@@ -19,7 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         _('adresse line one'), max_length=255, blank=True, null=True)
     address_line_2 = models.CharField(
         _('adresse line two'), max_length=255, blank=True, null=True)
-    zip_code = models.IntegerField(blank=True, null=True)
+    zip_code = models.CharField(blank=True, null=True, max_length=20)
     city = models.CharField(_('city'), max_length=50, blank=True, null=True)
 
     email = models.EmailField(_('email address'), max_length=255, unique=True)

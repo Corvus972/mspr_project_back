@@ -23,8 +23,7 @@ urlpatterns = [
     # test http://127.0.0.1:8000/ruleproduct/id_in_your_product_associated
     path('ruleproduct/<product_associated>',
          views.SaleProduct.as_view(), name='saleproduct'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     path('login/', MyTokenObtainPairView.as_view(), name='token_create'),
     path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
