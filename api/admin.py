@@ -43,12 +43,12 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = ProductResource
     # GET
     list_display = ('product_name', 'product_price',
-                    'description', 'quantity', 'created_at', 'sku', 'image')
+                    'description', 'quantity', 'sku', 'image')
 
     # POST
     fieldsets = (
         ('Informations requises', {
-            'fields': ('product_name', 'product_price', 'description', 'quantity', 'created_at', 'sku', 'image')
+            'fields': ('product_name', 'product_price', 'description', 'quantity',  'sku', 'image')
         }),
     )
 

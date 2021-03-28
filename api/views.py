@@ -1,7 +1,5 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import viewsets, status
-from rest_framework.response import Response
-
 from .models import Order
 from .serializers import ProductSerializer, CustomUserSerializer, MyTokenObtainPairSerializer, SaleRuleSerializer, \
     OrderSerializer

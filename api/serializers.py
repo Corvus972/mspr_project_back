@@ -1,16 +1,13 @@
-import json
-from typing import List
-
+from typing import List, Sequence
 from rest_framework import serializers
-
-from api.models import OrderItems, Order
+from api.models import OrderItems, Order, models
 from api.models.product import Product
 from api.models.sales_rule import SalesRule
 from api.models.custom_user import CustomUser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         ordering = ['-id']
         model = Product
@@ -118,8 +115,14 @@ class OrderSerializer(serializers.ModelSerializer):
         return response
 
     def create(self, validated_data):
-        list_items = validated_data.pop('items')
-        order = Order.objects.create(**validated_data)
+        list_items: List = validated_data.pop('items')
+        order: Order = Order.objects.create(**validated_data)
         for item in list_items:
+            # add items
             OrderItems.objects.create(order=order, **item)
+
+            # decrease quantity
+            Product.objects.filter(product_name=item.get('product', None)).update(
+                quantity=models.F('quantity') - item.get('quantity', None)
+            )
         return order
