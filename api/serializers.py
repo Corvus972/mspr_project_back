@@ -1,3 +1,6 @@
+import json
+from typing import List
+
 from rest_framework import serializers
 
 from api.models import OrderItems, Order
@@ -8,7 +11,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         ordering = ['-id']
         model = Product
@@ -28,7 +30,8 @@ class SaleRuleSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(SaleRuleSerializer, self).to_representation(instance)
         for item in data['product_associated']:
-            item['product_price'] = str(float(item['product_price']) - (float(item['product_price']) / data['discount_amount']))
+            item['product_price'] = str(
+                float(item['product_price']) - (float(item['product_price']) / data['discount_amount']))
         return data
 
 
@@ -51,6 +54,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Serializer
     """
+
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
@@ -77,24 +81,24 @@ class OrderItemsSerializer(serializers.ModelSerializer):
 
 
 class ItemsSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = OrderItems
-        fields = ["pk", ]
+        fields = ['quantity', 'product']
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['product'] = {
-                "id": instance.product.id,
-                "name": instance.product.product_name,
-                "price": instance.product.product_price,
-                "quantity": instance.quantity,
-            }
-
+            "id": instance.product.id,
+            "name": instance.product.product_name,
+            "price": instance.product.product_price,
+        }
         return response
 
 
 class OrderSerializer(serializers.ModelSerializer):
     items = ItemsSerializer(many=True, read_only=False, required=False)
+    product = ProductSerializer(many=True, read_only=False, required=False)
 
     class Meta:
         model = Order
@@ -106,34 +110,16 @@ class OrderSerializer(serializers.ModelSerializer):
         response['user'] = {
             "email": instance.user.email,
             "first_name": instance.user.first_name,
-            "last_name": instance.user.last_name,
+            "address_line_1": instance.user.address_line_1,
+            "address_line_2": instance.user.address_line_2,
+            "zip_code": instance.user.zip_code,
+            "city": instance.user.city,
         }
         return response
 
-    # def create(self, validated_data):
-    #     print('self:', self)
-    #     print('validated_data:', validated_data)
-    #     instance = Order.objects
-    #     items_data = validated_data.pop('items')
-    #     items = instance.all()
-    #
-    #     instance.date = validated_data.get('date', instance.date)
-    #     instance.unique_number = validated_data.get('unique_number', instance.unique_number)
-    #     instance.status = validated_data.get('status', instance.status)
-    #     instance.shipping_address = validated_data.get('shipping_address', instance.shipping_address)
-    #     instance.billing_address = validated_data.get('billing_address', instance.billing_address)
-    #     instance.save()
-    #
-    #     for item in items_data:
-    #         qs_article = Article.objects.filter(article_code=item.get('article_code'))
-    #         if qs_article.exists():
-    #             article = items[0]
-    #             article.article_code = item.get('article_code', article.article_code)
-    #             article.name = item.get('name', article.name)
-    #             article.barcode = item.get('barcode', article.barcode)
-    #             article.price_without_taxes = item.get('price_without_taxes', article.price_without_taxes)
-    #             article.quantity = item.get('quantity', article.quantity)
-    #             article.rate_VAT = item.get('rate_VAT', article.rate_VAT)
-    #             article.price_by_kg_without_taxes = item.get('price_by_kg_without_taxes', article.price_by_kg_without_taxes)
-    #             article.save()
-    #     return instance
+    def create(self, validated_data):
+        list_items = validated_data.pop('items')
+        order = Order.objects.create(**validated_data)
+        for item in list_items:
+            OrderItems.objects.create(order=order, **item)
+        return order

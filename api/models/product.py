@@ -9,9 +9,9 @@ class Product(models.Model):
         max_length=30, verbose_name="Nom du produit")
     product_price = models.DecimalField(
         default=0.00, decimal_places=2, max_digits=100, verbose_name="Prix du produit")
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, default="Pas de description pour l'instant")
     quantity = models.IntegerField(default=0, verbose_name="Quantité")
-    created_at = models.DateField(verbose_name="Créée le")
+    created_at = models.DateField(auto_now=True, verbose_name="Créée le")
     sku = models.CharField(max_length=30)
     image = models.ImageField(
         upload_to=RandomFileName('img/'), null=True, blank=True)

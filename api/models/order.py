@@ -1,9 +1,7 @@
 from django.db import models
 
-from api.models import CustomUser
-
 STATUS_CHOICES = (
-    ('Paid', 'Paid'),
+    ('Ordered', 'Ordered'),
     ('Preparation', 'Preparation'),
     ('Done', 'Done'),
     ('Canceled', 'Canceled'),
@@ -12,14 +10,14 @@ STATUS_CHOICES = (
 
 class Order(models.Model):
     date = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, null=True)
-    user = models.ForeignKey(CustomUser,
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Ordered")
+    user = models.ForeignKey("CustomUser",
                              related_name='order_user',
                              on_delete=models.CASCADE,
                              null=True)
 
     class Meta:
-        app_label = 'order'
+        app_label = 'api'
         ordering = ('-date',)
         verbose_name = 'Commande'
         verbose_name_plural = 'Commandes'

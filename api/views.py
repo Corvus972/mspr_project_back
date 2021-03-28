@@ -1,5 +1,7 @@
 from django.contrib.auth.hashers import make_password
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+
 from .models import Order
 from .serializers import ProductSerializer, CustomUserSerializer, MyTokenObtainPairSerializer, SaleRuleSerializer, \
     OrderSerializer
@@ -15,6 +17,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = Product.objects.all().order_by('product_name')
     serializer_class = ProductSerializer
+    lookup_field = "sku"
 
 
 class SalesRuleViewSet(viewsets.ModelViewSet):
@@ -64,5 +67,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-    def perform_update(self, serializer):
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
         serializer.save(user=self.request.user)
