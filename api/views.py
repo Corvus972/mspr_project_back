@@ -1,10 +1,11 @@
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ProductSerializer, CustomUserSerializer, MyTokenObtainPairSerializer, SaleRuleSerializer
+from .models import Order
+from .serializers import ProductSerializer, CustomUserSerializer, MyTokenObtainPairSerializer, SaleRuleSerializer, \
+    OrderSerializer
 from api.models.custom_user import CustomUser
 from api.models.product import Product
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from api.models.sales_rule import SalesRule
 from rest_framework import generics
@@ -33,8 +34,11 @@ class SaleProduct(generics.ListAPIView):
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
-    queryset = CustomUser.objects.all().order_by('id').exclude(is_staff=True)
+    queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+    def get_queryset(self):
+        return self.queryset.exclude(is_staff=True)
 
     def perform_create(self, serializer):
         password = make_password(self.request.data['password'])
@@ -52,3 +56,13 @@ class CustomUserViewSet(viewsets.ModelViewSet):
 class MyTokenObtainPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
+    lookup_field = 'pk'
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)

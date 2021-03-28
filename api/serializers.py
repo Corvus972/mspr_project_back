@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from api.models import OrderItems, Order
 from api.models.product import Product
 from api.models.sales_rule import SalesRule
 from api.models.custom_user import CustomUser
@@ -67,3 +69,71 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['super_user'] = self.user.is_superuser
         return data
 
+
+class OrderItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItems
+        fields = '__all__'
+
+
+class ItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItems
+        fields = ["pk", ]
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['product'] = {
+                "id": instance.product.id,
+                "name": instance.product.product_name,
+                "price": instance.product.product_price,
+                "quantity": instance.quantity,
+            }
+
+        return response
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = ItemsSerializer(many=True, read_only=False, required=False)
+
+    class Meta:
+        model = Order
+        ordering = ['date']
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['user'] = {
+            "email": instance.user.email,
+            "first_name": instance.user.first_name,
+            "last_name": instance.user.last_name,
+        }
+        return response
+
+    # def create(self, validated_data):
+    #     print('self:', self)
+    #     print('validated_data:', validated_data)
+    #     instance = Order.objects
+    #     items_data = validated_data.pop('items')
+    #     items = instance.all()
+    #
+    #     instance.date = validated_data.get('date', instance.date)
+    #     instance.unique_number = validated_data.get('unique_number', instance.unique_number)
+    #     instance.status = validated_data.get('status', instance.status)
+    #     instance.shipping_address = validated_data.get('shipping_address', instance.shipping_address)
+    #     instance.billing_address = validated_data.get('billing_address', instance.billing_address)
+    #     instance.save()
+    #
+    #     for item in items_data:
+    #         qs_article = Article.objects.filter(article_code=item.get('article_code'))
+    #         if qs_article.exists():
+    #             article = items[0]
+    #             article.article_code = item.get('article_code', article.article_code)
+    #             article.name = item.get('name', article.name)
+    #             article.barcode = item.get('barcode', article.barcode)
+    #             article.price_without_taxes = item.get('price_without_taxes', article.price_without_taxes)
+    #             article.quantity = item.get('quantity', article.quantity)
+    #             article.rate_VAT = item.get('rate_VAT', article.rate_VAT)
+    #             article.price_by_kg_without_taxes = item.get('price_by_kg_without_taxes', article.price_by_kg_without_taxes)
+    #             article.save()
+    #     return instance

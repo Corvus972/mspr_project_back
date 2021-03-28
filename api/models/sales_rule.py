@@ -1,5 +1,4 @@
 from django.db import models
-from api.models.product import Product
 
 
 class SalesRule(models.Model):
