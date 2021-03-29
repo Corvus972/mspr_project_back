@@ -87,8 +87,13 @@ class ItemsSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response['product'] = {
             "id": instance.product.id,
-            "name": instance.product.product_name,
-            "price": instance.product.product_price,
+            "product_name": instance.product.product_name,
+            "product_price": str(instance.product.product_price),
+            "description": instance.product.description,
+            "quantity": instance.product.quantity,
+            "created_at": instance.product.created_at,
+            "sku": instance.product.sku,
+            "image": ""
         }
         return response
 
