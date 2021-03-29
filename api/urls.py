@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from django.conf.urls import url
 router = routers.DefaultRouter()
 
 router.register(r'products', ProductViewSet, basename='product')
@@ -14,6 +15,10 @@ router.register(r'salesrule', SalesRuleViewSet, basename='salesrules')
 router.register(r'users', CustomUserViewSet, basename='users')
 router.register(r'orders', OrderViewSet, basename='orders')
 
+me_routing = MeViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update'
+})
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -23,4 +28,5 @@ urlpatterns = [
     path('login/', MyTokenObtainPairView.as_view(), name='token_create'),
     path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    url(r'me/', me_routing, name='me')
 ]

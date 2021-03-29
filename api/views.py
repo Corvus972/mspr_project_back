@@ -9,6 +9,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from api.models.sales_rule import SalesRule
 from rest_framework import generics
+from rest_framework.mixins import ListModelMixin, DestroyModelMixin, UpdateModelMixin, RetrieveModelMixin, \
+    CreateModelMixin
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -33,7 +36,7 @@ class SaleProduct(generics.ListAPIView):
         return SalesRule.objects.filter(product_associated=product_associated)
 
 
-class CustomUserViewSet(viewsets.ModelViewSet):
+class CustomUserViewSet(CreateModelMixin, GenericViewSet):
     permission_classes = (AllowAny,)
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -44,6 +47,17 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         password = make_password(self.request.data['password'])
         serializer.save(password=password)
+
+
+class MeViewSet(RetrieveModelMixin, GenericViewSet, UpdateModelMixin, DestroyModelMixin):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    # lookup_field = "pk"
+
+    def get_object(self):
+        return self.request.user
 
     def perform_update(self, serializer):
         # Hash password but passwords are not required
