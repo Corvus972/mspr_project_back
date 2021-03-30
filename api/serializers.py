@@ -33,6 +33,7 @@ class SaleRuleSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = CustomUser
         fields = ('password', 'is_superuser',
@@ -88,7 +89,7 @@ class ItemsSerializer(serializers.ModelSerializer):
         response['product'] = {
             "id": instance.product.id,
             "product_name": instance.product.product_name,
-            "product_price": str(instance.product.product_price),
+            "product_price": "10.00",
             "description": instance.product.description,
             "quantity": instance.product.quantity,
             "created_at": instance.product.created_at,
