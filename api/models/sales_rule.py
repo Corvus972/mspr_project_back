@@ -2,6 +2,9 @@ from django.db import models
 
 
 class SalesRule(models.Model):
+    """
+    SalesRule Model
+    """
     name = models.CharField(
         max_length=30, verbose_name="Nom du coupon")
     description = models.CharField(max_length=500)

@@ -5,6 +5,9 @@ from django.utils.deconstruct import deconstructible
 
 @deconstructible
 class RandomFileName(object):
+    """
+    RandomFileName for file
+    """
     def __init__(self, path):
         self.path = os.path.join(path, "%s%s")
 

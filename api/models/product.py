@@ -5,6 +5,9 @@ from api.helpers import RandomFileName
 
 
 class Product(models.Model):
+    """
+    Product Model
+    """
     product_name = models.CharField(
         max_length=30, verbose_name="Nom du produit")
     product_price = models.DecimalField(

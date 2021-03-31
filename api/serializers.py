@@ -24,6 +24,7 @@ class SaleRuleSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'from_data', 'to_data',
                   'coupon_code', 'discount_amount', 'product_associated')
 
+    # calculate discount amount in price directly and send it
     def to_representation(self, instance):
         data = super(SaleRuleSerializer, self).to_representation(instance)
         for item in data['product_associated']:
@@ -33,7 +34,6 @@ class SaleRuleSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = CustomUser
         fields = ('password', 'is_superuser',
@@ -49,10 +49,6 @@ class LoginSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    """
-    Token Serializer
-    """
-
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
@@ -60,6 +56,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         return token
 
+    # custom keys with values in json body
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
@@ -75,15 +72,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class OrderItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItems
-        fields = '__all__'
-
-
-class ItemsSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OrderItems
         fields = ['quantity', 'product']
 
+    # send article representation
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['product'] = {
@@ -100,7 +91,7 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = ItemsSerializer(many=True, read_only=False, required=False)
+    items = OrderItemsSerializer(many=True, read_only=False, required=False)
     product = ProductSerializer(many=True, read_only=False, required=False)
 
     class Meta:
@@ -108,6 +99,7 @@ class OrderSerializer(serializers.ModelSerializer):
         ordering = ['date']
         fields = '__all__'
 
+    # send user representation
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['user'] = {
@@ -120,6 +112,7 @@ class OrderSerializer(serializers.ModelSerializer):
         }
         return response
 
+    # overwrite create to handle items in order
     def create(self, validated_data):
         list_items: List = validated_data.pop('items')
         order: Order = Order.objects.create(**validated_data)

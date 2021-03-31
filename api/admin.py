@@ -4,6 +4,9 @@ from api.resource import *
 
 
 class OrderInLine(admin.TabularInline):
+    """
+    Order Items
+    """
     model = OrderItems
     readonly_fields = ('product', 'quantity',)
     fields = ('product', 'quantity',)
@@ -17,6 +20,9 @@ class OrderInLine(admin.TabularInline):
 
 @admin.register(Order)
 class OrderViews(admin.ModelAdmin):
+    """
+    Order
+    """
     list_display = ('date', 'status', 'user',)
     list_filter = ['date']
     date_hierarchy = 'date'
@@ -39,7 +45,11 @@ class OrderViews(admin.ModelAdmin):
         return True
 
 
+@admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    """
+    Product
+    """
     resource_class = ProductResource
     # GET
     list_display = ('product_name', 'product_price',
@@ -48,10 +58,11 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     # POST
     fieldsets = (
         ('Informations requises', {
-            'fields': ('product_name', 'product_price', 'description', 'quantity',  'sku', 'image')
+            'fields': ('product_name', 'product_price', 'description', 'quantity', 'sku', 'image')
         }),
     )
 
+    # filter queryset
     def get_queryset(self, request):
         # for super admin
         if request.user.is_authenticated and request.user.is_superuser:
@@ -63,11 +74,11 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             return qs.filter(product__name=request.user)
 
 
-admin.site.register(Product, ProductAdmin)
-
-
 @admin.register(SalesRule)
 class SalesRuleAdmin(admin.ModelAdmin):
+    """
+    SalesRule
+    """
     # GET
     list_display = ('name', 'description',
                     'from_data', 'to_data', 'coupon_code', 'discount_amount', 'products_list')
@@ -81,12 +92,10 @@ class SalesRuleAdmin(admin.ModelAdmin):
     )
 
     # get product name to associate it to the coupon
-
     def product_associated(self, obj):
         return obj.product_associated
 
     # product_associated.empty_value_display = 'api.Product.None'
-
     def get_queryset(self, request):
         # for super admin
         if request.user.is_authenticated and request.user.is_superuser:
@@ -94,5 +103,5 @@ class SalesRuleAdmin(admin.ModelAdmin):
             return qs
         else:
             # for admin
-            qs = super(ProductAdmin, self).get_queryset(request)
+            qs = super(SalesRuleAdmin, self).get_queryset(request)
             return qs.filter(SalesRuleAdmin=request.user)

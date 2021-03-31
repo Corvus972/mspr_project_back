@@ -7,6 +7,9 @@ from ..custom_user_manager import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """
+    User Model
+    """
     last_name = models.CharField(
         _('first name'), max_length=50, blank=True, null=True)
     first_name = models.CharField(

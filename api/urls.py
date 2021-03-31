@@ -8,12 +8,14 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 from django.conf.urls import url
+
+# Default router
 router = routers.DefaultRouter()
 
-router.register(r'products', ProductViewSet, basename='product')
-router.register(r'salesrule', SalesRuleViewSet, basename='salesrules')
-router.register(r'users', CustomUserViewSet, basename='users')
-router.register(r'orders', OrderViewSet, basename='orders')
+router.register(r'products', ProductViewSet, basename='product')  # product
+router.register(r'salesrule', SalesRuleViewSet, basename='salesrules')  # salesrule
+router.register(r'users', CustomUserViewSet, basename='users')  # users
+router.register(r'orders', OrderViewSet, basename='orders')  # orders
 
 me_routing = MeViewSet.as_view({
     'get': 'retrieve',
@@ -24,9 +26,9 @@ urlpatterns = [
     path('', include(router.urls)),
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('ruleproduct/<product_associated>',
-         SaleProduct.as_view(), name='saleproduct'),
-    path('login/', MyTokenObtainPairView.as_view(), name='token_create'),
-    path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    url(r'me/', me_routing, name='me')
+         SaleProduct.as_view(), name='saleproduct'),  # salesproduct
+    path('login/', MyTokenObtainPairView.as_view(), name='token_create'),  # get token
+    path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),  # refresh token
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),  # verify token
+    url(r'me/', me_routing, name='me')  # user authenticated
 ]

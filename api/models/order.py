@@ -9,6 +9,9 @@ STATUS_CHOICES = (
 
 
 class Order(models.Model):
+    """
+    Order Model
+    """
     date = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Ordered")
     user = models.ForeignKey("CustomUser",

@@ -2,6 +2,9 @@ from django.db import models
 
 
 class OrderItems(models.Model):
+    """
+    Order Items Model
+    """
     order = models.ForeignKey("Order",
                               related_name='items',
                               on_delete=models.CASCADE)
