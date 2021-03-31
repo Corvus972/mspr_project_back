@@ -29,15 +29,15 @@ git checkout develop
 Changer vos identifiants de base de données et le nom de la base de données dans le app/.env
 
 # Créer les migrations et appliquer
-`pip manage.py makemigrations api`
-`pip manage.py migrate`
+`python manage.py makemigrations api`
+`python manage.py migrate`
 
 # Créer un super utilisateur
-`pip manage.py createsuperuser`
+`python manage.py createsuperuser`
 
 
 # Lancer le serveur
-`pip manage.py runserver`
+`python manage.py runserver`
 
  # Adresses utiles
 ## [api](http://127.0.0.1:8000/)
